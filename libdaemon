@@ -1,0 +1,79 @@
+# libdaemon - A Bash library for daemonize a script
+# Copyright (C) 2016  David Moreno
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+[[ -z $__libdaemon_version__ ]] && {
+__libdaemon_version__="1.0.0"
+
+__dmn_pidfile_dir__="/var/run"
+__dmn_pidfile_name__="`basename $0`.pid"
+
+function dmn_get_pidf_dir {
+	echo "$__dmn_pidfile_dir__"
+}
+
+#Must be an absolute path
+function dmn_set_pidf_dir {
+	__dmn_pidfile_dir__="$1"
+}
+
+function dmn_get_pidf_name {
+	echo "$__dmn_pidfile_name__"
+}
+
+function dmn_set_pidf_name {
+	__dmn_pidfile_name__="$1"
+}
+
+function dmn_pidf_create {
+	mkdir -p "$__dmn_pidfile_dir__"
+	[[ ! -d "$__dmn_pidfile_dir__" ]] && return
+	[[ -z "$__dmn_pidfile_name__" ]] && return
+	echo $$ > "$__dmn_pidfile_dir__/$__dmn_pidfile_name__"
+}
+
+function dmn_pidf_exists {
+	[[ ! -d "$__dmn_pidfile_dir__" ]] && { echo 0; return; }
+	[[ -z "$__dmn_pidfile_name__" ]] && { echo 0; return; }
+	[[ ! -r "$__dmn_pidfile_dir__/$__dmn_pidfile_name__" ]] && { echo 0; return; }
+	echo 1
+}
+
+function dmn_pidf_own {
+	(( ! `dmn_pidf_exists` )) && { echo 0; return; }
+	[[ "$$" = `cat "$__dmn_pidfile_dir__/$__dmn_pidfile_name__"`  ]] && echo 1
+	echo 1
+}
+
+function dmn_pidf_delete {
+	(( ! `dmn_pidf_exists` )) && return
+	rm -f "$__dmn_pidfile_dir__/$__dmn_pidfile_name__"
+}
+
+function dmn_start {
+	[[ -z $1 || -z $2 ]] && return
+	cd /
+	umask 000
+	exec 0>&-
+	exec 1>&-
+	exec 2>&-
+	{
+		trap "$2; dmn_pidf_delete; exit" SIGINT SIGHUP SIGTERM SIGKILL
+		while [[ 1 ]]; do $1; done
+	} & disown
+	exit
+}
+
+} #Guard end.
