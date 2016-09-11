@@ -27,6 +27,7 @@ Returns the current PID file directory
 
 The default is **/var/run**
 
+
 #### dmn_set_pidf_dir *dir*
 Sets the current PID file directory
 
@@ -34,25 +35,32 @@ Sets the current PID file directory
 
 The script must have write permissions on **dir**
 
+
 #### dmn_get_pidf_name
 Returns the current PID file name
+
 
 #### dmn_set_pidf_name *name*
 Sets the current PID file name
 
 The default is **[script_name].pid**
 
+
 #### dmn_pidf_create
 Creates the PID file
+
 
 #### dmn_pidf_exists
 Determines if an older PID file exists
 
+
 #### dmn_pidf_own
 Determines if the PID file has the same PID than the current script
 
+
 #### dmn_pidf_delete
 Deletes the pid file
+
 
 #### dmn_start *main* *terminate*
 Daemonizes the script
