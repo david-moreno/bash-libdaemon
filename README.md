@@ -30,7 +30,9 @@ The default is **/var/run**
 #### dmn_set_pidf_dir *dir*
 Sets the current PID file directory
 
-The script must have write permissions on *dir*
+**dir** must be an absolute path
+
+The script must have write permissions on **dir**
 
 #### dmn_get_pidf_name
 Returns the current PID file name
@@ -59,7 +61,7 @@ The function **main** will be executed in an endless loop
 
 The function **terminate** will be executed on SIGINT SIGHUP SIGTERM or SIGKILL
 
-PID file deleting and the 'exit' call are added automatically
+PID file deleting and the *exit* call are added automatically
 
 Example
 -------
