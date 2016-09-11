@@ -24,10 +24,12 @@ Usage
 
 #### dmn_get_pidf_dir
 Returns the current PID file directory
+
 The default is **/var/run**
 
 #### dmn_set_pidf_dir *dir*
 Sets the current PID file directory
+
 The script must have write permissions on *dir*
 
 #### dmn_get_pidf_name
@@ -35,6 +37,7 @@ Returns the current PID file name
 
 #### dmn_set_pidf_name *name*
 Sets the current PID file name
+
 The default is **[script_name].pid**
 
 #### dmn_pidf_create
@@ -51,6 +54,12 @@ Deletes the pid file
 
 #### dmn_start *main* *terminate*
 Daemonizes the script
+
+The function **main** will be executed in an endless loop
+
+The function **terminate** will be executed on SIGINT SIGHUP SIGTERM or SIGKILL
+
+PID file deleting and the 'exit' call are added automatically
 
 Example
 -------
