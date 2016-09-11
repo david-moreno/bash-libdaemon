@@ -28,6 +28,7 @@ Returns the current PID file directory
 The default is **/var/run**
 
 
+
 #### dmn_set_pidf_dir *dir*
 Sets the current PID file directory
 
@@ -36,8 +37,10 @@ Sets the current PID file directory
 The script must have write permissions on **dir**
 
 
+
 #### dmn_get_pidf_name
 Returns the current PID file name
+
 
 
 #### dmn_set_pidf_name *name*
@@ -46,20 +49,25 @@ Sets the current PID file name
 The default is **[script_name].pid**
 
 
+
 #### dmn_pidf_create
 Creates the PID file
+
 
 
 #### dmn_pidf_exists
 Determines if an older PID file exists
 
 
+
 #### dmn_pidf_own
 Determines if the PID file has the same PID than the current script
 
 
+
 #### dmn_pidf_delete
 Deletes the pid file
+
 
 
 #### dmn_start *main* *terminate*
@@ -74,7 +82,7 @@ PID file deleting and the *exit* call are added automatically
 Example
 -------
 
-This script creates the PID file **foo.pid** on the current working directory, checks if an existing PID file exists and runs the daemonized script
+This script (libdaemon-test.sh) creates the PID file **foo.pid** on the current working directory, checks if an existing PID file exists, runs the daemonized script and writes dots and some messages on the **test.log** file until a SIGINT,SIGHUP, SIGTERM or SIGKILL signal is received:
 
 ```bash
 #!/bin/bash
@@ -113,3 +121,12 @@ echo -e "\n* $0: Initiating">>$LOG
 #Daemonizes the script.
 dmn_start main term
 ```
+
+You can check the daemon output with **tailf test.log**:
+
+    * ./libdaemon-test.sh: Initiating
+    ............
+
+If you issue a **killall libdaemon-test.sh** command, the script with terminate and **test.log** will show the message:
+
+    * ./libdaemon-test.sh: Exiting
